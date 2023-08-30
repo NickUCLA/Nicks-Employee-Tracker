@@ -7,7 +7,7 @@ const db = mysql.createConnection(
     // MySQL username,
     user: "root",
     // MySQL password
-    password: "Preserves7!",
+    password: "",
     database: "employeeTracker_db",
   },
   console.log(`Connected to the employeeTracker_db database.`)
