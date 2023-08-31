@@ -7,7 +7,7 @@ const db = mysql.createConnection(
     // MySQL username,
     user: "root",
     // MySQL password
-    password: "Preserves7!",
+    password: "",
     database: "employeeTracker_db",
   },
   console.log(`Connected to the employeeTracker_db database.`)
@@ -162,7 +162,7 @@ function addRole() {
       ])
       .then((answer) => {
         const department = res.find(
-          (department) => department.name === answer.department
+          (department) => department.department_name === answer.department
         );
         console.log(answer.title);
         const query = "INSERT INTO roles SET ?";
@@ -171,7 +171,7 @@ function addRole() {
           {
             title: answer.title,
             salary: answer.salary,
-            department_id: department,
+            department_id: department.id,
           },
           (err, res) => {
             if (err) throw err;
@@ -183,4 +183,81 @@ function addRole() {
         );
       });
   });
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "Enter the employee's first name",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "Enter the employee's last name",
+      },
+      {
+        type: "input",
+        name: "role",
+        message: "Enter the employee's role id",
+        validate: function (input) {
+          const value = parseInt(input);
+          if (!Number.isNaN(value)) {
+            return true;
+          }
+          return "Please enter a valid number.";
+        },
+      },
+      {
+        type: "input",
+        name: "manager",
+        message: "Enter employees manager id",
+        validate: function (input) {
+          const value = parseInt(input);
+          if (!Number.isNaN(value)) {
+            return true;
+          }
+          return "Please enter a valid number.";
+        },
+      },
+    ])
+    .then((answer) => {
+      console.log(answer);
+
+      const query = "INSERT INTO employees SET ?";
+
+      db.query(
+        query,
+        {
+          first_name: answer.firstName,
+          last_name: answer.lastName,
+          role_id: answer.role,
+          manager_id: answer.manager,
+        },
+        (err, res) => {
+          if (err) throw err;
+          console.log(
+            `Added employee ${answer.firstName} ${answer.lastName} with role ID ${answer.role} under manager ID ${answer.manager}.`
+          );
+          start();
+        }
+      );
+    });
+}
+
+function addManager() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "Enter the employee's first name",
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "Enter the employee's last name",
+    },
+  ]);
 }
