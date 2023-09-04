@@ -26,7 +26,6 @@ VALUES
 ('Sales Representative', 60000.00, 10),
 ('Marketing Specialist', 55000.00, 11);
 
---adjust managers--
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
 ('John', 'Smith', 1, NULL),
